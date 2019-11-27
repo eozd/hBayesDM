@@ -28,7 +28,7 @@ class Bandit2ArmDelta(TaskModel):
             regressors=OrderedDict([
                 
             ]),
-            postpreds=['y_pred'],
+            postpreds=['y_dist'],
             parameters_desc=OrderedDict([
                 ('A', 'learning rate'),
                 ('tau', 'inverse temperature'),

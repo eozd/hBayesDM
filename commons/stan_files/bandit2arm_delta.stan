@@ -68,12 +68,15 @@ generated quantities {
   real log_lik[N];
 
   // For posterior predictive check
-  real y_pred[N, T];
+  //real y_pred[N, T];
+  real y_dist[N, T, 2];
 
   // Set all posterior predictions to 0 (avoids NULL values)
   for (i in 1:N) {
     for (t in 1:T) {
-      y_pred[i, t] = -1;
+      for (k in 1:2) {
+          y_dist[i, t, k] = -1;
+      }
     }
   }
 
@@ -95,7 +98,8 @@ generated quantities {
         log_lik[i] += categorical_logit_lpmf(choice[i, t] | tau[i] * ev);
 
         // generate posterior prediction for current trial
-        y_pred[i, t] = categorical_rng(softmax(tau[i] * ev));
+        //y_pred[i, t] = categorical_rng(softmax(tau[i] * ev));
+        y_dist[i, t] = to_array_1d(softmax(tau[i] * ev));
 
         // prediction error
         PE = outcome[i, t] - ev[choice[i, t]];
