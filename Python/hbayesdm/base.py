@@ -41,6 +41,7 @@ class TaskModel(metaclass=ABCMeta):
                  postpreds: Sequence[str],
                  parameters_desc: 'OrderedDict[str, str]',
                  additional_args_desc: 'OrderedDict[str, float]',
+                 seed: int = None,
                  **kwargs):
         # Assign attributes
         self.__task_name = task_name
@@ -52,6 +53,7 @@ class TaskModel(metaclass=ABCMeta):
         self.__postpreds = postpreds
         self.__parameters_desc = parameters_desc
         self.__additional_args_desc = additional_args_desc
+        self.__seed = seed
 
         # Handle special case (dd_single)
         if self.task_name == 'dd' and self.model_type == 'single':
@@ -707,7 +709,8 @@ class TaskModel(metaclass=ABCMeta):
         if vb:
             return sm.vb(data=data_dict,
                          pars=pars,
-                         init=gen_init)
+                         init=gen_init,
+                         seed=self.__seed)
         else:
             return sm.sampling(data=data_dict,
                                pars=pars,
@@ -719,7 +722,8 @@ class TaskModel(metaclass=ABCMeta):
                                control={'adapt_delta': adapt_delta,
                                         'stepsize': stepsize,
                                         'max_treedepth': max_treedepth},
-                               n_jobs=ncore)
+                               n_jobs=ncore,
+                               seed=self.__seed)
 
     def _define_measure_function(self, ind_pars: str) -> Callable:
         """Define which function to use to summarize results.
