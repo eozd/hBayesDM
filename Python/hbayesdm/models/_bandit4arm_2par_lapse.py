@@ -30,7 +30,7 @@ class Bandit4Arm2ParLapse(TaskModel):
             regressors=OrderedDict([
                 
             ]),
-            postpreds=['y_pred'],
+            postpreds=['y_dist'],
             parameters_desc=OrderedDict([
                 ('Arew', 'reward learning rate'),
                 ('Apun', 'punishment learning rate'),
